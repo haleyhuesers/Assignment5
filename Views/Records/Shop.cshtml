@@ -9,7 +9,13 @@
 <p>
     <a asp-action="Cart">View Shopping Cart</a>
 </p>
-<table class="table">
+
+<div>
+    <label for="genreFilter">Filter by Genre:</label>
+    @Html.DropDownList("genreFilter", ViewBag.Genres as SelectList, "All", new { @class = "form-control", @onchange = "filterByGenre()" })
+</div>
+
+<table class="table" id="recordTable">
     <thead>
         <tr>
             <th>
@@ -27,22 +33,27 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="recordRow" data-genre="@item.Genre">
+                <td>@item.Genre</td>
+                <td>@item.Title</td>
+                <td>@item.Performer</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Genre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Performer)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.RecordId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.RecordId">Delete</a>
+                    <button>Add to Cart</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<script>
+    function filterByGenre() {
+        var selectedGenre = $("#genreFilter").val();
+
+        $(".recordRow").show();
+
+        if (selectedGenre !== "") {
+            $(".recordRow[data-genre!='" + selectedGenre + "']").hide();
+        }
+    }
+</script>
+

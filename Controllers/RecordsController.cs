@@ -30,11 +30,25 @@ namespace Assignment5.Controllers
         // GET: Records
         public async Task<IActionResult> Shop()
         {
-            return _context.Record != null ?
-                        View(await _context.Record.ToListAsync()) :
-                        Problem("Entity set 'RecordDBContext.Record'  is null.");
+            var records = await _context.Record.ToListAsync();
+            var genres = records.Select(r => r.Genre).Distinct().ToList();
+
+            ViewBag.Genres = new SelectList(genres);
+
+            return View(records);
         }
 
+        public IActionResult FilterByGenre(string selectedGenre)
+        {
+            var records = _context.Record.ToList();
+
+            if (!string.IsNullOrEmpty(selectedGenre) && selectedGenre != "All")
+            {
+                records = records.Where(r => r.Genre == selectedGenre).ToList();
+            }
+
+            return PartialView("_RecordTablePartial", records);
+        }
 
         // GET: Records/Details/5
         public async Task<IActionResult> Cart()
