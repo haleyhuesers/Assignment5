@@ -27,6 +27,24 @@ namespace Assignment5.Controllers
                           Problem("Entity set 'RecordDBContext.Record'  is null.");
         }
 
+        // GET: Records
+        public async Task<IActionResult> Shop()
+        {
+            return _context.Record != null ?
+                        View(await _context.Record.ToListAsync()) :
+                        Problem("Entity set 'RecordDBContext.Record'  is null.");
+        }
+
+
+        // GET: Records/Details/5
+        public async Task<IActionResult> Cart()
+        {
+            return _context.Record != null ?
+                        View(await _context.Record.ToListAsync()) :
+                        Problem("Entity set 'RecordDBContext.Record'  is null.");
+        }
+
+
         // GET: Records/Details/5
         public async Task<IActionResult> Details(int? id)
         {
