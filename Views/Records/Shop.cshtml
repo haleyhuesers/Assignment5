@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<Assignment5.Models.Record>
-
 @{
     ViewData["Title"] = "Index";
 }
@@ -43,6 +42,18 @@
 
 <h1>Cart</h1>
 
+<button onclick="alert('Purchasing music now.')">Purchase</button>
+
+<script>
+    function showCustomModal() {
+        document.getElementById("customModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("customModal").style.display = "none";
+    }
+</script>
+
 <table class="table" id="shoppingCartTable">
     <thead>
         <tr>
@@ -63,29 +74,11 @@
     </tbody>
 </table>
 
+<p>
+    <span id="cartItemCount">0</span> items in cart
+</p>
+
 <script>
- //   $(document).ready(function () {
-   //     $(".addToCartBtn").click(function () {
-     //       var genre = $(this).data("genre");
-       //     var title = $(this).data("title");
-         //   var performer = $(this).data("performer");
-
-            // Add the selected record to the shopping cart table
- //           $("#shoppingCartTable tbody").append(
-   //             '<tr>' +
-     //           '<td>' + genre + '</td>' +
-       //         '<td>' + title + '</td>' +
-         //       '<td>' + performer + '</td>' +
-           //     '<td><button class="removeFromCartBtn">Remove</button></td>' +
-             //   '</tr>'
- //           );
-   //     });
-
-        // Add click event for remove from cart button
-     //   $("#shoppingCartTable").on("click", ".removeFromCartBtn", function () {
-       //     $(this).closest("tr").remove();
-   //     });
-  //  });
 
     function filterByGenre() {
         var selectedGenre = $("#genreFilter").val();
@@ -101,6 +94,9 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Initialize the cart count
+        var cartCount = 0;
+
         $(".addToCartBtn").click(function () {
             console.log("Button clicked");
 
@@ -119,11 +115,27 @@
                 '<td><button class="removeFromCartBtn">Remove</button></td>' +
                 '</tr>'
             );
+
+            // Increment the cart count
+            cartCount++;
+            updateCartCount();
         });
 
         // Add click event for remove from cart button
         $("#shoppingCartTable").on("click", ".removeFromCartBtn", function () {
             $(this).closest("tr").remove();
+
+            // Decrement the cart count
+            cartCount--;
+            updateCartCount();
         });
+
+        // Function to update the cart count in the HTML
+        function updateCartCount() {
+            $("#cartItemCount").text(cartCount);
+
+            // Set the value of the hidden input field
+            $("#cartCountInput").val(cartCount);
+        }
     });
 </script>
