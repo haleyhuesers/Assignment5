@@ -32,8 +32,11 @@ namespace Assignment5.Controllers
         {
             var records = await _context.Record.ToListAsync();
             var genres = records.Select(r => r.Genre).Distinct().ToList();
+            var performers = records.Select(r => r.Performer).Distinct().ToList();
 
             ViewBag.Genres = new SelectList(genres);
+            ViewBag.Performers = new SelectList(performers);
+
 
             return View(records);
         }

@@ -10,6 +10,11 @@
     @Html.DropDownList("genreFilter", ViewBag.Genres as SelectList, "All", new { @class = "form-control", @onchange = "filterByGenre()" })
 </div>
 
+<div>
+    <label for="performerFilter">Filter by Performer:</label>
+    @Html.DropDownList("performerFilter", ViewBag.Performers as SelectList, "All", new { @class = "form-control", @onchange = "filterByPerformer()" })
+</div>
+
 <table class="table" id="recordTable">
     <thead>
         <tr>
@@ -28,7 +33,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="recordRow" data-genre="@item.Genre">
+            <tr class="recordRow" data-genre="@item.Genre" data-performer="@item.Performer">
                 <td>@item.Genre</td>
                 <td>@item.Title</td>
                 <td>@item.Performer</td>
@@ -82,13 +87,45 @@
 
     function filterByGenre() {
         var selectedGenre = $("#genreFilter").val();
+        var performers = [];
 
         $(".recordRow").show();
 
-        if (selectedGenre !== "") {
+        if (selectedGenre !== "All") {
             $(".recordRow[data-genre!='" + selectedGenre + "']").hide();
+            // Collect performers for the selected genre
+            performers = $(".recordRow[data-genre='" + selectedGenre + "']").map(function () {
+                return $(this).data("performer");
+            }).get();
+        }
+
+        // Update the performer dropdown list
+        updatePerformerDropdown(performers);
+    }
+
+    function filterByPerformer() {
+        var selectedPerformer = $("#performerFilter").val();
+
+        $(".recordRow").show();
+
+        if (selectedPerformer !== "All") {
+            $(".recordRow[data-performer!='" + selectedPerformer + "']").hide();
         }
     }
+
+    function updatePerformerDropdown(performers) {
+        // Remove existing options
+        $("#performerFilter").empty();
+
+        // Add a default "All" option
+        $("#performerFilter").append("<option value='All'>All</option>");
+
+        // Add performers to the dropdown list
+        for (var i = 0; i < performers.length; i++) {
+            $("#performerFilter").append("<option value='" + performers[i] + "'>" + performers[i] + "</option>");
+        }
+    }
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
